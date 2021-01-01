@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace EndlessRunner.Scripts
+namespace AI_Dino
 {
     public class GameHandler_Setup : MonoBehaviour {
 

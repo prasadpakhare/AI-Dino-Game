@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace EndlessRunner.Scripts
+namespace AI_Dino
 {
     public class Player : MonoBehaviour
     {
@@ -27,13 +27,11 @@ namespace EndlessRunner.Scripts
         public float moveSpeed = 9f;
         public GameObject tapToPlay;
         private Animator _animator;
-        private State state;
         private PlayerAgent _playerAgent;
 
         private void Awake()
         {
             instance = this;
-            // playerBase = gameObject.GetComponent<Player_Base>();
             rigidbody2d = transform.GetComponent<Rigidbody2D>();
             boxCollider2d = transform.GetComponent<BoxCollider2D>();
             waitForStart = true;
@@ -44,16 +42,10 @@ namespace EndlessRunner.Scripts
         {
             tapToPlay.SetActive(true);
             rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
-            _animator = GetComponent<Animator>();
+            GetComponent<Animator>().SetTrigger("started");
             _playerAgent = GetComponent<PlayerAgent>();
         }
-
-        private enum State
-        {
-            WaitingToStart,
-            Playing,
-            Dead
-        }
+    
 
         private void Update()
         {
@@ -63,7 +55,6 @@ namespace EndlessRunner.Scripts
                 HandleMovement();
             }
 
-            HandleMovement();
             gameObject.transform.rotation = Quaternion.identity;
         }
 
@@ -112,7 +103,6 @@ namespace EndlessRunner.Scripts
             rigidbody2d.velocity = Vector2.zero;
             rigidbody2d.bodyType = RigidbodyType2D.Static;
             transform.position = Vector3.zero;
-            state = State.WaitingToStart;
         }
     }
 }

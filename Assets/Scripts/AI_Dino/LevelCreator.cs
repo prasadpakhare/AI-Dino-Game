@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace EndlessRunner.Scripts
+namespace AI_Dino
 {
     public class LevelCreator : MonoBehaviour
     {
@@ -54,7 +53,7 @@ namespace EndlessRunner.Scripts
         {
             Transform levelPartTransform =
                 Instantiate(levelPart, new Vector3(spawnPosition.x, -2, 0), Quaternion.identity);
-            Instantiate(enemy, new Vector3(spawnPosition.x + Random.Range(10, 20), -1, 0), Quaternion.identity);
+            Instantiate(enemy, new Vector3(spawnPosition.x + 10, -1, 0), Quaternion.identity);
             return levelPartTransform;
         }
 
