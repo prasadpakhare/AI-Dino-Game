@@ -18,8 +18,7 @@ namespace AI_Dino
         public event EventHandler OnDied;
 
         public event EventHandler OnStartedPlaying;
-
-        // private Player_Base playerBase;
+        
         public Rigidbody2D rigidbody2d;
         public BoxCollider2D boxCollider2d;
         public bool waitForStart;
@@ -41,11 +40,9 @@ namespace AI_Dino
         private void Start()
         {
             tapToPlay.SetActive(true);
-            rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
-            GetComponent<Animator>().SetTrigger("started");
             _playerAgent = GetComponent<PlayerAgent>();
         }
-    
+
 
         private void Update()
         {
@@ -65,7 +62,9 @@ namespace AI_Dino
         {
             StartCoroutine(HandleSpeedCoroutine());
             rigidbody2d.velocity = new Vector2(+moveSpeed, rigidbody2d.velocity.y);
+            // rigidbody2d.AddForce(transform.forward * moveSpeed);
         }
+        
 
         IEnumerator HandleSpeedCoroutine()
         {
@@ -88,7 +87,13 @@ namespace AI_Dino
             {
                 Die();
                 _playerAgent.SetReward(-1);
+                Debug.Log("Negative Reward   "+_playerAgent.GetCumulativeReward());
                 _playerAgent.EndEpisode();
+            }
+            else if (other.tag == "reward")
+            {
+                _playerAgent.SetReward(1);
+                Debug.Log("positive Reward  "+_playerAgent.GetCumulativeReward());
             }
         }
 

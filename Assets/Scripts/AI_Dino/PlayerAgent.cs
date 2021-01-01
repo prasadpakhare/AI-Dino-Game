@@ -16,8 +16,11 @@ namespace AI_Dino
         public override void Initialize()
         {
             player = GetComponent<Player>();
+
+            player.rigidbody2d.bodyType = RigidbodyType2D.Kinematic;
+            GetComponent<Animator>().SetTrigger("started");
             startPos = player.transform.position;
-            player.OnDied += PlayerDied;
+            isJumpReady = false;
         }
 
         public override void OnActionReceived(float[] actions)
@@ -32,7 +35,7 @@ namespace AI_Dino
 
         private void Jump()
         {
-            if (isJumpReady)
+            if (isJumpReady )
             {
                 player.rigidbody2d.velocity = Vector2.up * JUMP_AMOUNT;
             }
@@ -50,15 +53,7 @@ namespace AI_Dino
             if (Input.GetKey(jump))
                 actionsOut[0] = 1;
         }
-
-        private void PlayerDied(object sender, EventArgs e)
-        {
         
-        }
-
-
-
-
         private void OnCollisionStay2D(Collision2D other)
         {
             if (player.boxCollider2d.IsTouching(other.collider) && other.collider.name == "platform")
@@ -75,7 +70,7 @@ namespace AI_Dino
             }
         }
 
-    
+
         private void FixedUpdate()
         {
             if (isJumpReady)
@@ -90,8 +85,8 @@ namespace AI_Dino
         {
             player.transform.position = startPos;
             player.rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
-            isJumpReady = true;
             player.isDead = false;
+            SetReward(0);
         }
     }
 }
