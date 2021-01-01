@@ -28,6 +28,7 @@ namespace EndlessRunner.Scripts
         public GameObject tapToPlay;
         private Animator _animator;
         private State state;
+        private PlayerAgent _playerAgent;
 
         private void Awake()
         {
@@ -44,6 +45,7 @@ namespace EndlessRunner.Scripts
             tapToPlay.SetActive(true);
             rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
             _animator = GetComponent<Animator>();
+            _playerAgent = GetComponent<PlayerAgent>();
         }
 
         private enum State
@@ -59,18 +61,13 @@ namespace EndlessRunner.Scripts
             if (waitForStart)
             {
                 HandleMovement();
-               
             }
 
             HandleMovement();
             gameObject.transform.rotation = Quaternion.identity;
         }
-        
+
         private bool isgrounded = false;
-        
-
-
-
 
 
         private void HandleMovement()
@@ -94,7 +91,21 @@ namespace EndlessRunner.Scripts
             return transform.position;
         }
 
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.tag == "enemy")
+            {
+                Die();
+                _playerAgent.SetReward(-1);
+                _playerAgent.EndEpisode();
+            }
+        }
 
+        private void Die()
+        {
+            isDead = true;
+            _playerAgent.OnEpisodeBegin();
+        }
 
         public void Reset()
         {

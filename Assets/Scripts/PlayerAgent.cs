@@ -28,7 +28,9 @@ public class PlayerAgent : Agent
         // if (Math.Abs(actions[0] - 1) < Mathf.Epsilon) // 0 is doing nothing and 1 is Jump
         //     Jump();
         if ((Mathf.FloorToInt(actions[0]) == 1) && isJumpReady) // 0 is doing nothing and 1 is Jump
+        {
             Jump();
+        }
     }
 
     private void Jump()
@@ -58,15 +60,7 @@ public class PlayerAgent : Agent
     }
 
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "enemy")
-        {
-            Die();
-            SetReward(-1);
-            EndEpisode();
-        }
-    }
+
 
     private void OnCollisionStay2D(Collision2D other)
     {
@@ -84,18 +78,7 @@ public class PlayerAgent : Agent
         }
     }
 
-    private void Die()
-    {
-        player.isDead = true;
-        player.rigidbody2d.bodyType = RigidbodyType2D.Static;
-        player.rigidbody2d.velocity = Vector3.zero;
-        MiniGameManager.Instance.lostGame.SetActive(true);
-        OnEpisodeBegin();
-
-        Debug.Log("player died");
-    }
-
-
+    
     private void FixedUpdate()
     {
         if (isJumpReady)
@@ -111,5 +94,6 @@ public class PlayerAgent : Agent
         player.transform.position = startPos;
         player.rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
         isJumpReady = true;
+        player.isDead = false;
     }
 }
